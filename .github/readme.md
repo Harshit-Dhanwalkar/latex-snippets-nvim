@@ -6,6 +6,7 @@
 
 ## Roadmap:
 
+- [ ] Make a better readme.md. 
 - [ ] Automatically generate a Snippets.md file with all the translations.
 - [ ] Improve modularity of the setup.
 - [ ] Simplify the snippet definitions.
