@@ -6,6 +6,7 @@
 
 ## Roadmap:
 
+- [ ] Automatically generate a Snippets.md file with all the translations.
 - [ ] Improve modularity of the setup.
 - [ ] Simplify the snippet definitions.
 - [ ] Add support for internationalization (multi-language snippets).
