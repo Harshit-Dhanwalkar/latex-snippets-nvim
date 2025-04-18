@@ -1,4 +1,15 @@
----@diagnostic disable: undefined-global
+-- Luasnips shorthands
+local ls = require("luasnip")
+local s = ls.snippet
+local i = ls.insert_node
+local t = ls.text_node
+local f = ls.function_node
+local fmta = require("luasnip.extras.fmt").fmta
+
+-- Utility functions
+local utils = require("plugins.snippets.tex.utils")
+local in_text = utils.in_text
+local in_mathzone = utils.in_mathzone
 
 return {
   -- LaTeX: Binary operator dots
@@ -18,52 +29,51 @@ return {
   s({ trig = "ddots", snippetType = "autosnippet" }, t(" \\ddots "), { condition = in_mathzone }),
 
   -- Easy Conj
-  s({ trig = 'conj', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
-    fmta(
-      [[  \overline{<>} ]],
-      {
-        i(1)
-      }
-    ),
+  s(
+    { trig = "conj", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta([[  \overline{<>} ]], {
+      i(1),
+    }),
     { condition = in_mathzone }
   ),
 
   --Easy abs
-  s({ trig = 'abs', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
-    fmta(
-      [[  | <> | ]],
-      {
-        i(1)
-      }
-    ),
+  s(
+    { trig = "abs", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta([[  | <> | ]], {
+      i(1),
+    }),
     { condition = in_mathzone }
   ),
 
   -- LaTeX: []1...[]n
 
-  s({ trig = '(%l)1(%l)n', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
-    fmta(
-      [[ <>_{1}, \dots, <>_n <> ]],
-      {
-        f(function(_, snip) return snip.captures[1] end),
-        f(function(_, snip) return snip.captures[1] end),
-        i(0)
-      }
-    ),
+  s(
+    { trig = "(%l)1(%l)n", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta([[ <>_{1}, \dots, <>_n <> ]], {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      i(0),
+    }),
     { condition = in_mathzone }
   ),
-  s({ trig = '(%l)1(%l)n', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
-    fmta(
-      [[ \(<>_{1}, \dots, <>_n \) <> ]],
-      {
-        f(function(_, snip) return snip.captures[1] end),
-        f(function(_, snip) return snip.captures[1] end),
-        i(0)
-      }
-    ),
+  s(
+    { trig = "(%l)1(%l)n", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta([[ \(<>_{1}, \dots, <>_n \) <> ]], {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      i(0),
+    }),
     { condition = in_text }
   ),
-
 
   -- LaTeX: listoperators
   s({ trig = "inlist", wordTrig = false, snippetType = "autosnippet" }, t("\\inlist"), { condition = in_mathzone }),
@@ -205,20 +215,35 @@ return {
   s({ trig = ";;", snippetType = "autosnippet" }, { t(" \\; ") }, { condition = in_mathzone }),
 
   -- LaTeX: mod binary operator
-  s({ trig = 'mod', regTrig = false, wordTrig = true, snippetType = "autosnippet" }, { t("\\bmod ") },
-    { condition = in_mathzone }),
+  s(
+    { trig = "mod", regTrig = false, wordTrig = true, snippetType = "autosnippet" },
+    { t("\\bmod ") },
+    { condition = in_mathzone }
+  ),
 
   -- LaTeX: Haskell
-  s({ trig = 'Ord', regTrig = false, wordTrig = true, snippetType = "autosnippet" }, { t("\\Ord ") },
-    { condition = in_mathzone }),
-  s({ trig = 'Eq', regTrig = false, wordTrig = true, snippetType = "autosnippet" }, { t("\\Eq ") },
-    { condition = in_mathzone }),
+  s(
+    { trig = "Ord", regTrig = false, wordTrig = true, snippetType = "autosnippet" },
+    { t("\\Ord ") },
+    { condition = in_mathzone }
+  ),
+  s(
+    { trig = "Eq", regTrig = false, wordTrig = true, snippetType = "autosnippet" },
+    { t("\\Eq ") },
+    { condition = in_mathzone }
+  ),
 
   -- LaTeX: counting operator
-  s({ trig = 'cN', regTrig = false, wordTrig = true, snippetType = "autosnippet" }, { t("\\N ") },
-    { condition = in_mathzone }),
-  s({ trig = 'bN', regTrig = false, wordTrig = true, snippetType = "autosnippet" }, { t("\\N ") },
-    { condition = in_mathzone }),
+  s(
+    { trig = "cN", regTrig = false, wordTrig = true, snippetType = "autosnippet" },
+    { t("\\N ") },
+    { condition = in_mathzone }
+  ),
+  s(
+    { trig = "bN", regTrig = false, wordTrig = true, snippetType = "autosnippet" },
+    { t("\\N ") },
+    { condition = in_mathzone }
+  ),
 
   -- LaTeX: Max Min quantifiers
   s({ trig = "bmax", wordTrig = false, snippetType = "autosnippet" }, t(" \\Max "), { condition = in_mathzone }),
@@ -266,8 +291,11 @@ return {
   -- LaTeX: To
   s({ trig = "->", wordTrig = false, snippetType = "autosnippet" }, t(" \\to "), { condition = in_mathzone }),
   s({ trig = "to", wordTrig = true, snippetType = "autosnippet" }, t(" \\to "), { condition = in_mathzone }),
-  s({ trig = "xto", wordTrig = true, snippetType = "autosnippet" }, { t(" \\xrightarrow{ "), i(1), t(" }") },
-    { condition = in_mathzone }),
+  s(
+    { trig = "xto", wordTrig = true, snippetType = "autosnippet" },
+    { t(" \\xrightarrow{ "), i(1), t(" }") },
+    { condition = in_mathzone }
+  ),
 
   -- LaTeX: Infty
   s({ trig = "ooo", wordTrig = true, snippetType = "autosnippet" }, t(" \\infty "), { condition = in_mathzone }),
@@ -275,6 +303,4 @@ return {
 
   -- LaTeX: EmptySet
   s({ trig = "empty", wordTrig = true, snippetType = "snippet" }, t(" \\emptyset "), { condition = in_mathzone }),
-
-
 }

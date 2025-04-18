@@ -1,9 +1,18 @@
----@diagnostic disable: undefined-global
+-- Luasnips shorthands
+local ls = require("luasnip")
+local s = ls.snippet
+local i = ls.insert_node
+local fmta = require("luasnip.extras.fmt").fmta
+
+-- Utility functions
+local utils = require("plugins.snippets.tex.utils")
+local in_text = utils.in_text
+local in_math = utils.in_math
 
 return {
-
   -- cases in text
-  s({ trig = 'cases', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+  s(
+    { trig = "cases", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
     fmta(
       [[
 $<> = \begin{cases}
@@ -23,7 +32,8 @@ $<> = \begin{cases}
   ),
 
   -- cases in math
-  s({ trig = 'cases', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+  s(
+    { trig = "cases", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
     fmta(
       [[
 <> = \begin{cases}

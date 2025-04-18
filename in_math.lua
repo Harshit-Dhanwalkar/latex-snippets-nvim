@@ -1,93 +1,92 @@
----@diagnostic disable: undefined-global
+-- Luasnips shorthands
+local ls = require("luasnip")
+local s = ls.snippet
+local sn = ls.snippet_node
+local i = ls.insert_node
+local d = ls.dynamic_node
+local t = ls.text_node
+local f = ls.function_node
+local fmt = require("luasnip.extras.fmt").fmt
+local fmta = require("luasnip.extras.fmt").fmta
+
+-- Utility functions
+local utils = require("plugins.snippets.tex.utils")
+local in_mathzone = utils.in_mathzone
 
 return {
   -- easy leftright anything
-  s({ trig = "lr()", snippetType = "autosnippet" },
-    { fmta(
-      [[\left( <> \right) <> ]],
-      {
-        i(1),
-        i(0)
-      }
-    ),
-    },
+  s(
+    { trig = "lr()", snippetType = "autosnippet" },
+    { fmta([[\left( <> \right) <> ]], {
+      i(1),
+      i(0),
+    }) },
     { condition = in_mathzone }
   ),
-  s({ trig = "lr[]", snippetType = "autosnippet" },
-    { fmta(
-      [[\left[ <> \right] <> ]],
-      {
-        i(1),
-        i(0)
-      }
-    ),
-    },
+  s(
+    { trig = "lr[]", snippetType = "autosnippet" },
+    { fmta([[\left[ <> \right] <> ]], {
+      i(1),
+      i(0),
+    }) },
     { condition = in_mathzone }
   ),
-  s({ trig = "lr{}", snippetType = "autosnippet" },
-    { fmta(
-      [[\left{ <> \right} <> ]],
-      {
-        i(1),
-        i(0)
-      }
-    ),
-    },
+  s(
+    { trig = "lr{}", snippetType = "autosnippet" },
+    { fmta([[\left{ <> \right} <> ]], {
+      i(1),
+      i(0),
+    }) },
     { condition = in_mathzone }
   ),
 
   -- easy differentials in mathzone
-  s({ trig = "df", snippetType = "autosnippet" },
-    { t("\\diff") },
-    { condition = in_mathzone }
-  ),
+  s({ trig = "df", snippetType = "autosnippet" }, { t("\\diff") }, { condition = in_mathzone }),
 
   -- langles rangles
-  s({ trig = 'lrangle', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
-    fmta(
-      [[\quant{ <> } <> ]],
-      {
-        i(1),
-        i(0)
-      }
-    ),
+  s(
+    { trig = "lrangle", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta([[\quant{ <> } <> ]], {
+      i(1),
+      i(0),
+    }),
     { condition = in_mathzone }
   ),
 
   -- <>/<>%s -> \frac{<>}{<>} :)
-  s({ trig = '([%w]+)/([%w]+)%s', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
-    fmta(
-      [[ \frac{<>}{<>} <> ]],
-      {
-        f(function(_, snip) return snip.captures[1] end),
-        f(function(_, snip) return snip.captures[2] end),
-        i(0),
-      }
-    ),
+  s(
+    { trig = "([%w]+)/([%w]+)%s", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta([[ \frac{<>}{<>} <> ]], {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      f(function(_, snip)
+        return snip.captures[2]
+      end),
+      i(0),
+    }),
     { condition = in_mathzone }
   ),
 
   -- Kff -> \frac{K}{i(2)} I believe..
-  s({ trig = '([%w]+)ff', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
-    fmta(
-      [[ \frac{<>}{<>} <> ]],
-      {
-        f(function(_, snip) return snip.captures[1] end),
-        i(1),
-        i(0)
-      }
-    ),
+  s(
+    { trig = "([%w]+)ff", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta([[ \frac{<>}{<>} <> ]], {
+      f(function(_, snip)
+        return snip.captures[1]
+      end),
+      i(1),
+      i(0),
+    }),
     { condition = in_mathzone, priority = 1 }
   ),
 
-  s({ trig = 'ff', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
-    fmta(
-      [[ \frac{<>}{<>} ]],
-      {
-        i(1),
-        i(2)
-      }
-    ),
+  s(
+    { trig = "ff", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta([[ \frac{<>}{<>} ]], {
+      i(1),
+      i(2),
+    }),
     { condition = in_mathzone, priority = 2 }
   ),
 
@@ -142,118 +141,107 @@ return {
   }, { condition = in_mathzone, priority = 1 }),
 
   -- LaTeX: Lims and stuff
-  s({ trig = 'Lim', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
-    fmta(
-      [[\lim_{ <> }^{ <> }{ <> } <>]],
-      {
-        i(1),
-        i(2),
-        i(3),
-        i(0),
-      }
-    ),
-    { condition = in_mathzone }),
-  s({ trig = 'Sum', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
-    fmta(
-      [[\sum_{ <> }^{ <> }{ <> } <>]],
-      {
-        i(1),
-        i(2),
-        i(3),
-        i(0),
-      }
-    ),
-    { condition = in_mathzone }),
-
-  s({ trig = 'Prod', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
-    fmta(
-      [[\prod_{ <> }^{ <> }{ <> } <>]],
-      {
-        i(1),
-        i(2),
-        i(3),
-        i(0),
-      }
-    ),
-    { condition = in_mathzone }),
-
-  s({ trig = 'Int', regTrig = true, wordTrig = false, snippetType = "autosnippet" },
-    fmta(
-      [[\int{ <> }^{ <> }{ <> } <>]],
-      {
-        i(1),
-        i(2),
-        i(3),
-        i(0),
-      }
-    ),
-    { condition = in_mathzone }),
-
-  -- LaTeX: Cuantifiers
-  s({ trig = 'ssum', regTrig = false, wordTrig = true, snippetType = "autosnippet" }, { t("\\sum ") },
-    { condition = in_mathzone }),
-  s({ trig = 'sprod', regTrig = false, wordTrig = true, snippetType = "autosnippet" }, { t("\\prod ") },
-    { condition = in_mathzone }),
-
-  -- LaTeX: easy () {}
-  s({ trig = '()', regTrig = false, wordTrig = true, snippetType = "autosnippet" },
-    fmta(
-      [[\paren{ <> } <>]],
-      {
-        i(1),
-        i(0),
-      }
-    )
+  s(
+    { trig = "Lim", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta([[\lim_{ <> }^{ <> }{ <> } <>]], {
+      i(1),
+      i(2),
+      i(3),
+      i(0),
+    }),
+    { condition = in_mathzone }
   ),
-  s({ trig = 'paren', regTrig = false, wordTrig = true, snippetType = "autosnippet" },
-    fmta(
-      [[\paren{ <> } <>]],
-      {
-        i(1),
-        i(0),
-      }
-    )
-  ),
-
-  s({ trig = '{}', regTrig = false, wordTrig = true, snippetType = "snippet" },
-    fmta(
-      [[\cbrack{ <> } <>]],
-      {
-        i(1),
-        i(0),
-      }
-    )
-  ),
-  s({ trig = 'cbrack', regTrig = false, wordTrig = true, snippetType = "autosnippet" },
-    fmta(
-      [[\cbrack{ <> } <>]],
-      {
-        i(1),
-        i(0),
-      }
-    )
-  ),
-  s({ trig = 'brack', regTrig = false, wordTrig = true, snippetType = "autosnippet" },
-    fmta(
-      [[\brack{ <> } <>]],
-      {
-        i(1),
-        i(0),
-      }
-    )
-  ),
-
-  s({ trig = 'conj', regTrig = false, wordTrig = true, snippetType = "autosnippet" },
-    fmta(
-      [[\cbrack{ <> } <>]],
-      {
-        i(1),
-        i(0),
-      }
-    ),
+  s(
+    { trig = "Sum", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta([[\sum_{ <> }^{ <> }{ <> } <>]], {
+      i(1),
+      i(2),
+      i(3),
+      i(0),
+    }),
     { condition = in_mathzone }
   ),
 
+  s(
+    { trig = "Prod", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta([[\prod_{ <> }^{ <> }{ <> } <>]], {
+      i(1),
+      i(2),
+      i(3),
+      i(0),
+    }),
+    { condition = in_mathzone }
+  ),
+
+  s(
+    { trig = "Int", regTrig = true, wordTrig = false, snippetType = "autosnippet" },
+    fmta([[\int{ <> }^{ <> }{ <> } <>]], {
+      i(1),
+      i(2),
+      i(3),
+      i(0),
+    }),
+    { condition = in_mathzone }
+  ),
+
+  -- LaTeX: Cuantifiers
+  s(
+    { trig = "ssum", regTrig = false, wordTrig = true, snippetType = "autosnippet" },
+    { t("\\sum ") },
+    { condition = in_mathzone }
+  ),
+  s(
+    { trig = "sprod", regTrig = false, wordTrig = true, snippetType = "autosnippet" },
+    { t("\\prod ") },
+    { condition = in_mathzone }
+  ),
+
+  -- LaTeX: easy () {}
+  s(
+    { trig = "()", regTrig = false, wordTrig = true, snippetType = "autosnippet" },
+    fmta([[\paren{ <> } <>]], {
+      i(1),
+      i(0),
+    })
+  ),
+  s(
+    { trig = "paren", regTrig = false, wordTrig = true, snippetType = "autosnippet" },
+    fmta([[\paren{ <> } <>]], {
+      i(1),
+      i(0),
+    })
+  ),
+
+  s(
+    { trig = "{}", regTrig = false, wordTrig = true, snippetType = "snippet" },
+    fmta([[\cbrack{ <> } <>]], {
+      i(1),
+      i(0),
+    })
+  ),
+  s(
+    { trig = "cbrack", regTrig = false, wordTrig = true, snippetType = "autosnippet" },
+    fmta([[\cbrack{ <> } <>]], {
+      i(1),
+      i(0),
+    })
+  ),
+  s(
+    { trig = "brack", regTrig = false, wordTrig = true, snippetType = "autosnippet" },
+    fmta([[\brack{ <> } <>]], {
+      i(1),
+      i(0),
+    })
+  ),
+
+  s(
+    { trig = "conj", regTrig = false, wordTrig = true, snippetType = "autosnippet" },
+    fmta([[\cbrack{ <> } <>]], {
+      i(1),
+      i(0),
+    }),
+    { condition = in_mathzone }
+  ),
 
   -- LaTeX: Single-digit subscripts [Auto-expand without confirming]
   s(
@@ -261,7 +249,7 @@ return {
       trig = "([^%a]*)([wxyz])([ijkn%d])",
       regTrig = true,
       wordTrig = false,
-      snippetType = "autosnippet"
+      snippetType = "autosnippet",
     },
     f(function(_, snip)
       local prefix = snip.captures[1]
@@ -302,8 +290,11 @@ return {
   s("mscr", fmt([[\mathscr{{{}}}]], i(1)), { condition = in_mathzone }),
 
   -- LaTeX: Math text
-  s({ trig = "tt", wordTrig = true, snippetType = "autosnippet" }, fmt([[\text{{ {} }}]], i(1)),
-    { condition = in_mathzone }),
+  s(
+    { trig = "tt", wordTrig = true, snippetType = "autosnippet" },
+    fmt([[\text{{ {} }}]], i(1)),
+    { condition = in_mathzone }
+  ),
 
   -- LaTeX: Square root
   s({ trig = "sqrt", snippetType = "autosnippet", wordTrig = false }, {
@@ -332,7 +323,8 @@ return {
     f(function(_, snip)
       return string.format("\\overline{%s}", snip.captures[1])
     end, {}),
-    { condition = in_mathzone }),
+    { condition = in_mathzone }
+  ),
 
   -- LaTeX: hat
   s(
